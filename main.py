@@ -1,7 +1,8 @@
 import math
 
+# =============================================================================
 # 1) EXISTING PLANTS
-
+# =============================================================================
 existing_plants = [
     {
         'name': 'd1',
@@ -15,9 +16,10 @@ existing_plants = [
         'status': 'available',
         'first_round_active': -9,
         'priority': 1,
-        # Placeholders for adjustable cost assumptions:
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        # New parameter: how many MW we want to bid this round
+        'bid_mw': 800.0
     },
     {
         'name': 'd2',
@@ -32,7 +34,8 @@ existing_plants = [
         'first_round_active': -6,
         'priority': 2,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 600.0
     },
     {
         'name': 'd3',
@@ -45,16 +48,17 @@ existing_plants = [
         'fixed_om_my_per_year': 19.0,
         'status': 'available',
         'first_round_active': -4,
-        'priority': None,       
+        'priority': None,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 600.0
     },
     {
         'name': 'd4',
         'type': 'wind',
         'capacity_mw': 50.0,
         'reliability_pct': 95.2,
-        'efficiency': 0.0,  # wind is not typically expressed this way
+        'efficiency': 0.0,  # wind not typically expressed as efficiency
         'loan_payment_my_per_year': 10.9,
         'remaining_payments_yrs': 14,
         'fixed_om_my_per_year': 2.4,
@@ -62,7 +66,8 @@ existing_plants = [
         'first_round_active': -3,
         'priority': 3,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 50.0
     },
     {
         'name': 'd5',
@@ -77,7 +82,8 @@ existing_plants = [
         'first_round_active': 0,
         'priority': 4,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 50.0
     },
     {
         'name': 'd6',
@@ -92,7 +98,8 @@ existing_plants = [
         'first_round_active': -14,
         'priority': 7,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 500.0
     },
     {
         'name': 'd7',
@@ -107,7 +114,8 @@ existing_plants = [
         'first_round_active': -8,
         'priority': 5,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 50.0
     },
     {
         'name': 'd8',
@@ -122,7 +130,8 @@ existing_plants = [
         'first_round_active': -5,
         'priority': 9,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 50.0
     },
     {
         'name': 'd9',
@@ -137,7 +146,8 @@ existing_plants = [
         'first_round_active': -1,
         'priority': 6,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 20.0
     },
     {
         'name': 'd10',
@@ -152,17 +162,19 @@ existing_plants = [
         'first_round_active': -3,
         'priority': 10,
         'fuel_cost_me_per_mwh_th': 0.0,
-        'variable_om_me_per_mwh': 0.0
+        'variable_om_me_per_mwh': 0.0,
+        'bid_mw': 100.0
     }
 ]
 
+# =============================================================================
 # 2) NEW INVESTMENT OPTIONS (plants you can build)
-
+# =============================================================================
 investment_options = [
     {
         'type': 'biomass',
         'reliability_pct': 96.0,
-        'efficiency': 0.412,        # 41.2%
+        'efficiency': 0.412,
         'construction_time_yrs': 4,
         'permit_time_yrs': 1,
         'life_expectancy_yrs': 40,
@@ -176,7 +188,7 @@ investment_options = [
     {
         'type': 'powderCoal',
         'reliability_pct': 96.0,
-        'efficiency': 0.412,        # 41.2%
+        'efficiency': 0.412,
         'construction_time_yrs': 4,
         'permit_time_yrs': 1,
         'life_expectancy_yrs': 40,
@@ -204,7 +216,7 @@ investment_options = [
     {
         'type': 'naturalgasOCGT',
         'reliability_pct': 96.0,
-        'efficiency': 0.392,        # 39.2%
+        'efficiency': 0.392,
         'construction_time_yrs': 2,
         'permit_time_yrs': 0,
         'life_expectancy_yrs': 30,
@@ -218,7 +230,7 @@ investment_options = [
     {
         'type': 'naturalgasCCGT',
         'reliability_pct': 96.0,
-        'efficiency': 0.585,        # 58.5%
+        'efficiency': 0.585,
         'construction_time_yrs': 3,
         'permit_time_yrs': 1,
         'life_expectancy_yrs': 30,
@@ -232,7 +244,7 @@ investment_options = [
     {
         'type': 'nuclear',
         'reliability_pct': 96.0,
-        'efficiency': 0.34,         # 34.0%
+        'efficiency': 0.34,
         'construction_time_yrs': 5,
         'permit_time_yrs': 2,
         'life_expectancy_yrs': 50,
@@ -261,79 +273,64 @@ investment_options = [
 
 def calculate_marginal_cost(plant, include_capital_in_bid=False):
     """
-    Calculates a 'marginal cost' or 'bid price' for an existing plant dictionary,
+    Calculates a 'marginal cost' or 'bid price' for an *existing* plant dictionary,
     based on:
       - Fuel cost / efficiency
       - Variable O&M
       - (Optionally) a share of capital/loan + fixed O&M spread over expected generation.
     """
-    # -------------------------------------------------------------------------
-    # 1) Fuel + O&M portion
-    # -------------------------------------------------------------------------
     eff = plant.get('efficiency', 1.0)
-    # Avoid zero or negative efficiency
     if eff <= 0:
         eff = 1.0
 
-    # Because capacity is presumably "thermal" in this revised approach, we’ll
-    # also use efficiency for the final electric output. 
-    capacity_mw_th = plant.get('capacity_mw', 0.0)
-    
-    # Fuel cost is given per MWh(th), so to get cost per MWh(e), we divide by eff
+    # 1) Fuel cost (assuming 'fuel_cost_me_per_mwh_th' is per MWh(th))
     fuel_cost = plant.get('fuel_cost_me_per_mwh_th', 0.0) / eff
     
+    # 2) Variable O&M
     var_om = plant.get('variable_om_me_per_mwh', 0.0)
     
-    # -------------------------------------------------------------------------
-    # 2) Capital / fixed cost portion (only if included in the bid)
-    # -------------------------------------------------------------------------
+    # 3) Capital / fixed cost portion (if included)
     capital_component = 0.0
     if include_capital_in_bid:
-        # Convert thermal capacity to electric capacity via efficiency
-        capacity_mw_e = capacity_mw_th * eff
-        
-        # Hours in a year
+        capacity = plant.get('capacity_mw', 0.0)
         annual_hours = 8760
+        # For net electric capacity, if capacity_mw is already "electric MW," just use it;
+        # if it's "thermal MW," multiply by efficiency. Adjust as per your data definitions:
+        capacity_e = bid_mw * eff  # optional if capacity is thermal; remove if it's net.
         
-        # We remove 'reliability' and rely purely on capacity * efficiency
-        expected_annual_mwh = capacity_mw_e * annual_hours
+        # Annual MWh(e)
+        expected_annual_mwh = capacity_e * annual_hours
         
         loan = plant.get('loan_payment_my_per_year', 0.0)
         fixed_om = plant.get('fixed_om_my_per_year', 0.0)
-
-        # Spread total annual (loan + fixed O&M) cost over the annual MWh(e)
+        
         if expected_annual_mwh > 0:
             capital_component = (loan + fixed_om) / expected_annual_mwh
     
-    # -------------------------------------------------------------------------
-    # 3) Final marginal cost
-    # -------------------------------------------------------------------------
     mc = fuel_cost + var_om + capital_component
     return mc
 
 def main():
+    # Example usage: compute marginal costs for each plant, with/without capital
     print("Marginal Costs for each *existing* Plant (excluding capital costs):")
     for p in existing_plants:
         mc_no_cap = calculate_marginal_cost(p, include_capital_in_bid=False)
-        print(f"  {p['name']:>3} ({p['type']}) -> {mc_no_cap:.4f} M€/MWh")
+        print(f"  {p['name']:>3} ({p['type']}) -> MC: {mc_no_cap:.4f} M€/MWh, Bid MW: {p['bid_mw']:.1f}")
     
     print("\nMarginal Costs for each *existing* Plant (including capital + fixed O&M):")
     for p in existing_plants:
         mc_with_cap = calculate_marginal_cost(p, include_capital_in_bid=True)
-        print(f"  {p['name']:>3} ({p['type']}) -> {mc_with_cap:.4f} M€/MWh")
+        print(f"  {p['name']:>3} ({p['type']}) -> MC: {mc_with_cap:.4f} M€/MWh, Bid MW: {p['bid_mw']:.1f}")
     
-
-    print("\nSample: If we consider building a new 'wind' plant from investment options:")
-    new_wind = investment_options[-1]
-    chosen_capacity = 400.0
+    # Example: building a new wind plant from investment options
+    print("\nExample of new investment (wind):")
+    new_wind = investment_options[-1]  # the last in the list is wind
+    chosen_capacity = 400.0  # example choice
     total_down_payment = new_wind['down_payment_me_per_mw'] * chosen_capacity
-    print(f"  Down payment for {chosen_capacity:.0f} MW of {new_wind['type']} ="
-          f" {total_down_payment:.3f} M€ (one-time)")
-    # Annual loan for chosen capacity:
-    annual_loan_payment = (new_wind['loan_payment_me_per_mw_per_year']
-                           * chosen_capacity)
-    print(f"  Annual loan payment for {chosen_capacity:.0f} MW of {new_wind['type']} ="
-          f" {annual_loan_payment:.3f} M€/year")
+    annual_loan_payment = new_wind['loan_payment_me_per_mw_per_year'] * chosen_capacity
+    print(f"  Building {chosen_capacity:.1f} MW of {new_wind['type']}")
+    print(f"    Down payment = {total_down_payment:.3f} M€ (one-time)")
+    print(f"    Annual loan  = {annual_loan_payment:.3f} M€/year")
 
 if __name__ == "__main__":
     main()
