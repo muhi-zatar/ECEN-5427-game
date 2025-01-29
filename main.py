@@ -261,34 +261,53 @@ investment_options = [
 
 def calculate_marginal_cost(plant, include_capital_in_bid=False):
     """
-    Calculates a 'marginal cost' or 'bid price' for an *existing* plant dictionary,
+    Calculates a 'marginal cost' or 'bid price' for an existing plant dictionary,
     based on:
       - Fuel cost / efficiency
       - Variable O&M
       - (Optionally) a share of capital/loan + fixed O&M spread over expected generation.
     """
+    # -------------------------------------------------------------------------
+    # 1) Fuel + O&M portion
+    # -------------------------------------------------------------------------
     eff = plant.get('efficiency', 1.0)
+    # Avoid zero or negative efficiency
     if eff <= 0:
         eff = 1.0
 
-    reliability_fraction = plant.get('reliability_pct', 100.0) / 100.0
+    # Because capacity is presumably "thermal" in this revised approach, we’ll
+    # also use efficiency for the final electric output. 
+    capacity_mw_th = plant.get('capacity_mw', 0.0)
     
+    # Fuel cost is given per MWh(th), so to get cost per MWh(e), we divide by eff
     fuel_cost = plant.get('fuel_cost_me_per_mwh_th', 0.0) / eff
     
     var_om = plant.get('variable_om_me_per_mwh', 0.0)
     
+    # -------------------------------------------------------------------------
+    # 2) Capital / fixed cost portion (only if included in the bid)
+    # -------------------------------------------------------------------------
     capital_component = 0.0
     if include_capital_in_bid:
-        capacity = plant.get('capacity_mw', 0.0)
+        # Convert thermal capacity to electric capacity via efficiency
+        capacity_mw_e = capacity_mw_th * eff
+        
+        # Hours in a year
         annual_hours = 8760
-        expected_annual_mwh = capacity * reliability_fraction * annual_hours
+        
+        # We remove 'reliability' and rely purely on capacity * efficiency
+        expected_annual_mwh = capacity_mw_e * annual_hours
         
         loan = plant.get('loan_payment_my_per_year', 0.0)
         fixed_om = plant.get('fixed_om_my_per_year', 0.0)
-        
+
+        # Spread total annual (loan + fixed O&M) cost over the annual MWh(e)
         if expected_annual_mwh > 0:
             capital_component = (loan + fixed_om) / expected_annual_mwh
     
+    # -------------------------------------------------------------------------
+    # 3) Final marginal cost
+    # -------------------------------------------------------------------------
     mc = fuel_cost + var_om + capital_component
     return mc
 
