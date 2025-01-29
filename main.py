@@ -183,7 +183,8 @@ investment_options = [
         'num_loan_payments': 20,
         'om_cost_me_per_mw_per_year': 0.130,
         'capacity_min_mw': 400,
-        'capacity_max_mw': 1000
+        'capacity_max_mw': 1000,
+        "bid_mw": 20
     },
     {
         'type': 'powderCoal',
@@ -197,7 +198,8 @@ investment_options = [
         'num_loan_payments': 20,
         'om_cost_me_per_mw_per_year': 0.121,
         'capacity_min_mw': 400,
-        'capacity_max_mw': 1000
+        'capacity_max_mw': 1000,
+        "bid_mw": 20
     },
     {
         'type': 'solar',
@@ -211,7 +213,8 @@ investment_options = [
         'num_loan_payments': 15,
         'om_cost_me_per_mw_per_year': 0.020,
         'capacity_min_mw': 100,
-        'capacity_max_mw': 700
+        'capacity_max_mw': 700,
+        "bid_mw": 20
     },
     {
         'type': 'naturalgasOCGT',
@@ -225,7 +228,8 @@ investment_options = [
         'num_loan_payments': 10,
         'om_cost_me_per_mw_per_year': 0.025,
         'capacity_min_mw': 100,
-        'capacity_max_mw': 500
+        'capacity_max_mw': 500,
+        "bid_mw": 20
     },
     {
         'type': 'naturalgasCCGT',
@@ -239,7 +243,8 @@ investment_options = [
         'num_loan_payments': 15,
         'om_cost_me_per_mw_per_year': 0.063,
         'capacity_min_mw': 500,
-        'capacity_max_mw': 900
+        'capacity_max_mw': 900,
+        "bid_mw": 20
     },
     {
         'type': 'nuclear',
@@ -253,7 +258,8 @@ investment_options = [
         'num_loan_payments': 20,
         'om_cost_me_per_mw_per_year': 0.111,
         'capacity_min_mw': 900,
-        'capacity_max_mw': 1300
+        'capacity_max_mw': 1300,
+        "bid_mw": 20
     },
     {
         'type': 'wind',
@@ -267,7 +273,8 @@ investment_options = [
         'num_loan_payments': 15,
         'om_cost_me_per_mw_per_year': 0.047,
         'capacity_min_mw': 100,
-        'capacity_max_mw': 700
+        'capacity_max_mw': 700,
+        "bid_mw": 20
     }
 ]
 
